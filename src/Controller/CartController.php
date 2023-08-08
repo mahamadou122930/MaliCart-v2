@@ -36,8 +36,6 @@ class CartController extends AbstractController
                 'subtotal' => $subtotal,
             ];
         }
-
-        dd($panierWithData);
         
         return $this->render('cart/index.html.twig', [
             'items'=> $panierWithData,
