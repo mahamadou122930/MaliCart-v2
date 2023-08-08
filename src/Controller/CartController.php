@@ -78,21 +78,46 @@ class CartController extends AbstractController
     
 
     #[Route('/panier/remove/{product_id}/{color}/{size}', name: 'remove_to_cart')]
-public function remove($product_id, $color, $size, SessionInterface $session)
-{
-    $panier = $session->get('panier', []);
+    public function remove($product_id, $color, $size, SessionInterface $session)
+    {
+        $panier = $session->get('panier', []);
 
-    // Générer l'identifiant unique basé sur les paramètres de l'URL
-    $uniqueId = $product_id . '_' . $color . '_' . $size;
+        // Générer l'identifiant unique basé sur les paramètres de l'URL
+        $uniqueId = $product_id . '_' . $color . '_' . $size;
 
-    // Vérifier si l'élément du panier existe avant de le supprimer
-    if (!empty($panier[$uniqueId])) {
-        unset($panier[$uniqueId]);
+        // Vérifier si l'élément du panier existe avant de le supprimer
+        if (!empty($panier[$uniqueId])) {
+            unset($panier[$uniqueId]);
+        }
+        $session->set('panier', $panier);
+
+        return $this->redirectToRoute('cart');
     }
-    $session->set('panier', $panier);
 
-    return $this->redirectToRoute('cart');
-}
+    #[Route('/panier/update/{product_id}/{color}/{size}', name: 'update_cart')]
+    public function update($product_id, $color, $size, SessionInterface $session, Request $request)
+    {
+        $panier = $session->get('panier', []);
+    
+                // Générer l'identifiant unique basé sur les paramètres de l'URL
+                $uniqueId = $product_id . '_' . $color . '_' . $size;
+        // Récupérer la nouvelle quantité depuis le formulaire
+        $newQuantity = $request->request->getInt('quantity');
+    
+        // Vérifier si l'élément du panier existe avant de mettre à jour la quantité
+        if (!empty($panier[$uniqueId])) {
+            if ($newQuantity < 1) {
+                // Si la quantité est inférieure à 1, supprimer l'élément du panier
+                unset($panier[$uniqueId]);
+            } else {
+                $panier[$uniqueId]['quantity'] = $newQuantity;
+            }
+        }
+        $session->set('panier', $panier);
+    
+        return $this->redirectToRoute('cart');
+    }
+
     
 
 

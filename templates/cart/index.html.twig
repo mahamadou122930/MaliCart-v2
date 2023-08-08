@@ -39,14 +39,16 @@
                   <div class="fs-lg text-accent pt-2">{{ (item.product.price /100)|number_format(0, '',' ')  }}<small> F CFA</small></div>
                 </div>
               </div> 
+              <form action="{{ path('update_cart', {'product_id': item.product.id, 'color': item.color, 'size': item.size}) }}" method="post">
               <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem;">
-                <label class="form-label" for="quantity{{ item.product.id }}">Quantity</label>
-                <input class="form-control quantity-input" type="number" id="quantity{{ item.product.id }}" min="1" value="{{ item.quantity }}" data-product-id="{{ item.product.id }}">
+              <label class="form-label" for="quantity{{ item.product.id }}">Quantity</label>
+              <input class="form-control quantity-input" type="number" name="quantity" id="quantity{{ item.product.id }}" min="1" value="{{ item.quantity }}" data-product-id="{{ item.product.id }}">
               <a href="{{ path('remove_to_cart', {'product_id': item.product.id, 'color': item.color, 'size': item.size }) }}" class="btn btn-link px-0 text-danger" role="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></a>
               </div>
             </div>
             {% endfor %}
-            <button class="btn btn-outline-accent d-block w-100 mt-4" type="button"><i class="ci-loading fs-base me-2"></i>Update cart</button>
+            <button class="btn btn-outline-accent d-block w-100 mt-4" type="submit"><i class="ci-loading fs-base me-2"></i>Update cart</button>
+            </form>
           </section>
           <!-- Sidebar-->
           <aside class="col-lg-4 pt-4 pt-lg-0 ps-xl-5">
