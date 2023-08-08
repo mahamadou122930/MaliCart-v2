@@ -77,18 +77,23 @@ class CartController extends AbstractController
     }
     
 
-    #[Route('/panier/remove/{id}', name: 'remove_to_cart')]
-    public function remove($id, SessionInterface $session, Request $request)
-    {
-        $panier = $session->get('panier', []);
-    
-        // Vérifier si l'élément du panier existe avant de le supprimer
-        if (isset($panier[$id])) {
-            unset($panier[$id]);
-            $session->set('panier', $panier);
-        }
-    
-        return $this->redirectToRoute('cart');
+    #[Route('/panier/remove/{product_id}/{color}/{size}', name: 'remove_to_cart')]
+public function remove($product_id, $color, $size, SessionInterface $session)
+{
+    $panier = $session->get('panier', []);
+
+    // Générer l'identifiant unique basé sur les paramètres de l'URL
+    $uniqueId = $product_id . '_' . $color . '_' . $size;
+
+    // Vérifier si l'élément du panier existe avant de le supprimer
+    if (!empty($panier[$uniqueId])) {
+        unset($panier[$uniqueId]);
     }
+    $session->set('panier', $panier);
+
+    return $this->redirectToRoute('cart');
+}
+    
+
 
 }

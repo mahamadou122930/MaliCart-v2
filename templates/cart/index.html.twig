@@ -42,7 +42,7 @@
               <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem;">
                 <label class="form-label" for="quantity{{ item.product.id }}">Quantity</label>
                 <input class="form-control quantity-input" type="number" id="quantity{{ item.product.id }}" min="1" value="{{ item.quantity }}" data-product-id="{{ item.product.id }}">
-                <a href="{{ path('remove_to_cart', {'id': item.product.id}) }}" class="btn btn-link px-0 text-danger remove-button" data-product-id="{{ item.product.id }}"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></a>
+              <a href="{{ path('remove_to_cart', {'product_id': item.product.id, 'color': item.color, 'size': item.size }) }}" class="btn btn-link px-0 text-danger" role="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></a>
               </div>
             </div>
             {% endfor %}
