@@ -56,6 +56,7 @@
                       </div><span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1">74 Reviews</span></a>
                     <button class="btn-wishlist me-0 me-lg-n3" type="button" data-bs-toggle="tooltip" title="Add to wishlist"><i class="ci-heart"></i></button>
                   </div>
+                <form action="{{ path('add_to_cart', {'id': shopproduct.id }) }}" method="post" class="mb-grid-gutter">
                  <div class="mb-3"><span class="h3 fw-normal text-accent me-1">{{ (shopproduct.price /100)|number_format(0, '',' ')  }}<small>F CFA</small></span>
                    <span class="badge bg-danger badge-shadow align-middle mt-n2">Sale</span>
                   </div>
@@ -69,28 +70,32 @@
                     {% endfor %}
                     <div class="product-badge product-available mt-n1"><i class="ci-security-check"></i>Product available</div>
                   </div>
-                  <form class="mb-grid-gutter" method="post">
-                    <div class="mb-3">
-                      <div class="d-flex justify-content-between align-items-center pb-1">
-                        <label class="form-label" for="product-size">Size:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Size guide</a>
-                      </div>
-                      <select class="form-select" required id="product-size">
-                         {% for size in shopproduct.size %}
-                            <option value="{{ size }}">{{ size }}</option>
-                        {% endfor %}
-                      </select>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center pb-1">
+                      <label class="form-label" for="product-size">Size:</label>
+                      <a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal">
+                        <i class="ci-ruler lead align-middle me-1 mt-n1"></i>Size guide
+                      </a>
                     </div>
-                    <div class="mb-3 d-flex align-items-center">
-                      <select class="form-select me-3" style="width: 5rem;">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
-                      <button class="btn btn-primary btn-shadow d-block w-100" type="submit"><i class="ci-cart fs-lg me-2"></i>Add to Cart</button>
-                    </div>
-                  </form>
+                    <select class="form-select" required id="product-size" name="size"> <!-- Ajout du nom 'size' pour récupérer la taille sélectionnée -->
+                      {% for size in shopproduct.size %}
+                        <option value="{{ size }}">{{ size }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="mb-3 d-flex align-items-center">
+                    <select class="form-select me-3" name="quantity" style="width: 5rem;"> <!-- Ajout du nom 'quantity' pour récupérer la quantité sélectionnée -->
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <button class="btn btn-primary btn-shadow d-block w-100" type="submit">
+                      <i class="ci-cart fs-lg me-2"></i>Add to Cart
+                    </button>
+                  </div>
+                </form>
                   <!-- Product panels-->
                   <div class="accordion mb-4" id="productPanels">
                     <div class="accordion-item">

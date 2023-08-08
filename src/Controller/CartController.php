@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ShopProductColor;
 use App\Repository\ShopProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,44 +37,44 @@ class CartController extends AbstractController
             ];
         }
 
+        dd($panierWithData);
+        
         return $this->render('cart/index.html.twig', [
             'items'=> $panierWithData,
             'totalPrice' => $totalPrice,
         ]);
     }
 
-
-
     #[Route('/panier/add/{id}', name: 'add_to_cart')]
-    public function add($id, SessionInterface $session, Request $request)
+    public function add($id, SessionInterface $session, Request $request, EntityManagerInterface $entityManager)
     {
         $panier = $session->get('panier', []);
     
-        $color = $request->request->get('color');
-        $size = $request->request->get('size');
-    
-        if (!empty($panier[$id]) && ($panier[$id]['color'] === $color && $panier[$id]['size'] === $size)) {
-            // Produit déjà existant avec la même couleur et taille, incrémenter la quantité
-            $panier[$id]['quantity']++;
-        } else {
-            // Produit inexistant ou produit existant avec une couleur ou taille différente
-            $newId = $id . '_' . $color . '_' . $size; // Génère un nouvel ID unique pour la nouvelle ligne
-            if (!empty($panier[$newId])) {
-                // Produit déjà existant avec la même couleur et taille, incrémenter la quantité
-                $panier[$newId]['quantity']++;
-            } else {
-                // Nouveau produit, ajouter une nouvelle ligne
-                $panier[$newId] = [
-                    'quantity' => 1,
-                    'color' => $color,
-                    'size' => $size,
-                ];
-            }
-        }    
-        $session->set('panier', $panier);
+        $colorId = $request->request->get('color'); // Récupération de l'identifiant de couleur
+        $color =$entityManager->getRepository(ShopProductColor::class)->find($colorId); // Remplacer 'Color' par le nom de votre entité Color
 
+        $size = $request->request->get('size');
+        $quantity = $request->request->getInt('quantity');
+
+        // Vérifier si le produit avec cet identifiant existe déjà dans le panier
+        $productId = $id . '_' . $color->getName() . '_' . $size;
+
+        if (!empty($panier[$productId])) {
+            // Produit déjà existant avec la même couleur et taille, incrémenter la quantité
+            $panier[$productId]['quantity'] += $quantity;
+        } else {
+            // Nouveau produit, ajouter une nouvelle ligne avec l'id du produit et le nom de la couleur
+            $panier[$productId] = [
+                'product_id' => $id,
+                'color' => $color->getName(), // Récupérer le nom de la couleur
+                'size' => $size,
+                'quantity' => $quantity,
+            ];
+        }
+
+
+        $session->set('panier', $panier);
         
-        dd($panier);
         return $this->redirectToRoute('cart');
     }
     
@@ -90,8 +92,5 @@ class CartController extends AbstractController
     
         return $this->redirectToRoute('cart');
     }
-    
-    
-
 
 }
