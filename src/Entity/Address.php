@@ -44,6 +44,9 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +74,10 @@ class Address
         $this->name = $name;
 
         return $this;
+    }
+    public function __toString()
+    {
+        return $this->getName().' : '.$this->getAddress().', '.$this->getCity().' - '.$this->getCountry();
     }
 
     public function getFirstname(): ?string
@@ -165,6 +172,18 @@ class Address
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

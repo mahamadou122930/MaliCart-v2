@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Address;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,6 +33,12 @@ class AddressType extends AbstractType
                 'label'=> false,
                 'attr'=> [
                     'placeholder'=> 'Entrez votre Nom'
+                ]
+            ])
+            ->add('email', EmailType::class, [
+                'label'=> false,
+                'attr'=> [
+                    'placeholder'=> 'Entrez votre mail de Facturation'
                 ]
             ])
             ->add('company', TextType::class, [
