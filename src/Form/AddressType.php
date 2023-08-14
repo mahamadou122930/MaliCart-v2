@@ -37,8 +37,9 @@ class AddressType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label'=> false,
+                'required' => false,
                 'attr'=> [
-                    'placeholder'=> 'Entrez votre mail de Facturation'
+                    'placeholder'=> '(facultatif) Entrez votre mail de Facturation'
                 ]
             ])
             ->add('company', TextType::class, [

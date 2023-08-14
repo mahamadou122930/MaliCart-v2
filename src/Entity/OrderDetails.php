@@ -29,6 +29,12 @@ class OrderDetails
     #[ORM\Column]
     private ?int $total = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $size = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $color = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,30 @@ class OrderDetails
     public function setTotal(int $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->size;
+    }
+
+    public function setSize(string $size): self
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }
