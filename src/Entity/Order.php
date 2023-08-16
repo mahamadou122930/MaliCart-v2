@@ -24,10 +24,10 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $carrierName = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $carrierPrice = null;
 
     #[ORM\Column(type: Types::TEXT)]
