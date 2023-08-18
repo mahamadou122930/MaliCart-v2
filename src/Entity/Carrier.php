@@ -23,6 +23,9 @@ class Carrier
     #[ORM\Column]
     private ?int $price = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $Deliverytime = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Carrier
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDeliverytime(): ?string
+    {
+        return $this->Deliverytime;
+    }
+
+    public function setDeliverytime(string $Deliverytime): self
+    {
+        $this->Deliverytime = $Deliverytime;
 
         return $this;
     }

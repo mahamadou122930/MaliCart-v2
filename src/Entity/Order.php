@@ -45,6 +45,9 @@ class Order
     #[ORM\Column]
     private ?float $discount = null;
 
+    #[ORM\Column]
+    private ?float $OrderTotal = null;
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -177,6 +180,18 @@ class Order
     public function setDiscount(float $discount): self
     {
         $this->discount = $discount;
+
+        return $this;
+    }
+
+    public function getOrderTotal(): ?float
+    {
+        return $this->OrderTotal;
+    }
+
+    public function setOrderTotal(float $OrderTotal): self
+    {
+        $this->OrderTotal = $OrderTotal;
 
         return $this;
     }

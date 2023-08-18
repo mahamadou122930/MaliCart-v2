@@ -79,10 +79,9 @@ class OrderController extends AbstractController
             $delivery_content .= '<br/>'.$delivery->getCountry();
     
             // Créer la commande avec les détails et les stocker dans la session
-            $order = $this->orderService->createOrder($panierWithData, $this->getUser(), $delivery_content);
+            $order = $this->orderService->createOrder($panierWithData, $this->getUser(), $delivery_content, $totalPrice, $shippingPrice);
             $session->set('order', $order);
-            // Supprimer l'ancienne clé 'panier' de la session
-            $session->remove('panier');
+
 
             return $this->redirectToRoute('checkout-shipping');
         }
@@ -130,11 +129,16 @@ class OrderController extends AbstractController
         $orderProducts = [];
         foreach ($order->getOrderDetails() as $orderDetail) {
             $productId = $orderDetail->getProduct();
+            $quantity = $orderDetail->getQuantity();
+            $subtotal = $orderDetail->getTotal(); // Sous-total pour cet OrderDetail
             $product = $productRepository->find($productId);
-            $orderProducts[] = $product;
+            $orderProducts[] = [
+                'product' => $product,
+                'quantity' => $quantity,
+                'subtotal' => $subtotal,
+            ];
         }
-        dd($orderProducts);
-
+       
         return $this->render('order/shipping_method.html.twig', [
             'order' => $order,
             'carriers' => $carriers,

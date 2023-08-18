@@ -9,8 +9,8 @@
           <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
-                <li class="breadcrumb-item"><a class="text-nowrap" href="index.html"><i class="ci-home"></i>Home</a></li>
-                <li class="breadcrumb-item text-nowrap"><a href="shop-grid-ls.html">Shop</a>
+                <li class="breadcrumb-item"><a class="text-nowrap" href="{{ path('home')}}"><i class="ci-home"></i>Home</a></li>
+                <li class="breadcrumb-item text-nowrap"><a href="{{ path('shop_products')}}">Shop</a>
                 </li>
                 <li class="breadcrumb-item text-nowrap active" aria-current="page">Cart</li>
               </ol>
@@ -26,14 +26,14 @@
           <!-- List of items-->
           <section class="col-lg-8">
             <div class="d-flex justify-content-between align-items-center pt-3 pb-4 pb-sm-5 mt-1">
-              <h2 class="h6 text-light mb-0">Products</h2><a class="btn btn-outline-primary btn-sm ps-2" href="shop-grid-ls.html"><i class="ci-arrow-left me-2"></i>Continue shopping</a>
+              <h2 class="h6 text-light mb-0">Products</h2><a class="btn btn-outline-primary btn-sm ps-2" href="{{ path('shop_products')}}"><i class="ci-arrow-left me-2"></i>Continue shopping</a>
             </div>
             {% for item in items %}
             <!-- Item-->
             <div class="d-sm-flex justify-content-between align-items-center my-2 pb-3 border-bottom">
               <div class="d-block d-sm-flex align-items-center text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="shop-single-v1.html"><img src="/upload\images\products\{{ item.product.illustration}}" width="160" alt="Product"></a>
                 <div class="pt-2">
-                  <h3 class="product-title fs-base mb-2"><a href="shop-single-v1.html"></a>{{ item.product.subtitle }}</h3>
+                  <h3 class="product-title fs-base mb-2"><a href="{{ path('shop_product', { 'slug' : item.product.slug })}}"></a>{{ item.product.subtitle }}</h3>
                   <div class="fs-sm"><span class="text-muted me-2">Size:</span>{{ item.size }}</div>
                   <div class="fs-sm"><span class="text-muted me-2">Color:</span>{{ item.color}}</div>
                   <div class="fs-lg text-accent pt-2">{{ (item.product.price /100)|number_format(0, '',' ')  }}<small> F CFA</small></div>
@@ -59,7 +59,7 @@
                   <h3 class="fw-normal">{{ (totalPrice /100)|number_format(0, '',' ') }}<small> F CFA</small></h3>
               </div>
                 <div class="accordion" id="order-options">                  
-                </div><a class="btn btn-primary btn-shadow d-block w-100 mt-4" href="checkout-details.html"><i class="ci-card fs-lg me-2"></i>Proceed to Checkout</a>
+                </div><a class="btn btn-primary btn-shadow d-block w-100 mt-4" href="{{ path('checkout-detail')}}"><i class="ci-card fs-lg me-2"></i>Proceed to Checkout</a>
               </div>
             </div>
              
