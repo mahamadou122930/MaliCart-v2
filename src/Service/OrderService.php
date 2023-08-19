@@ -28,20 +28,21 @@ class OrderService
         return $reference;
     }
 
-    public function createOrder(array $panierWithData, $user, $deliveryContent, $totalPrice, $shippingPrice): Order
+    public function createOrder(array $panierWithData, $user, $delivery_content): void
     {
         $order = new Order();
         $date = new \DateTimeImmutable();
+        $reference = $date->format('dmY').'-'.uniqid();
 
-        $reference = $this->generateOrderReference(12); // Utiliser la fonction de génération personnalisée
         $order->setReference($reference);
         $order->setUser($user);
-        $order->setCarrierPrice($shippingPrice);
         $order->setCreatedAt($date);
-        $order->setDelivery($deliveryContent);
+        $order->setDelivery($delivery_content);
         $order->setDiscount(0);
         $order->setState(0);
-        $order->setOrderTotal($totalPrice);
+        
+
+        $this->entityManager->persist($order);
 
         foreach ($panierWithData as $product) {
             $orderDetails = new OrderDetails();
@@ -52,11 +53,11 @@ class OrderService
             $orderDetails->setSize($product['size']);
             $orderDetails->setPrice($product['product']->getPrice());
             $orderDetails->setTotal($product['product']->getPrice() * $product['quantity']);
-            $order->addOrderDetail($orderDetails); // Associer le détail à la commande
-        }
-        // Ne pas enregistrer en base de données ici
-        return $order;
-    }
 
+            $this->entityManager->persist($orderDetails);
+        }
+
+        $this->entityManager->flush();
+    }
 
 }

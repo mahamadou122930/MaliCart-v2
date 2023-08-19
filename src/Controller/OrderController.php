@@ -66,7 +66,6 @@ class OrderController extends AbstractController
         $shippingselect->handleRequest($request);
 
         if ($shippingselect->isSubmitted() && $shippingselect->isValid()) {
-            $date = new \DateTimeImmutable();
             $delivery = $shippingselect->get('adresses')->getData();
             $delivery_content = $delivery->getFirstname().' '.$delivery->getLastname();
             $delivery_content .= '<br/>'.$delivery->getPhone();
@@ -78,12 +77,9 @@ class OrderController extends AbstractController
             $delivery_content .= '<br/>'.$delivery->getPostal().' '.$delivery->getCity();
             $delivery_content .= '<br/>'.$delivery->getCountry();
     
-            // Créer la commande avec les détails et les stocker dans la session
-            $order = $this->orderService->createOrder($panierWithData, $this->getUser(), $delivery_content, $totalPrice, $shippingPrice);
-            $session->set('order', $order);
+            // Créer la commande avec les détails
+            $this->orderService->createOrder($panierWithData, $this->getUser(), $delivery_content);
 
-
-            return $this->redirectToRoute('checkout-shipping');
         }
 
 
@@ -96,56 +92,6 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/order/checkout-shipping', name: 'checkout-shipping')]
-    public function methodshipping(SessionInterface $session, Request $request): Response
-    {
-        // Récupérer l'objet Order depuis la session
-        $order = $session->get('order');
-
-        $carriers = $this->entityManager->getRepository(Carrier::class)->findAll();
-
-        // Crée le formulaire en utilisant le OrderCarrierType
-        $form = $this->createForm(OrderCarrierType::class);
-        $form->handleRequest($request);
-
-        if (!$order) {
-            // Rediriger vers une autre page (par exemple, la page du panier) si l'objet Order n'est pas trouvé
-            return $this->redirectToRoute('cart');
-        }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $carrier = $form->get('carrier')->getData();
-             // Mettre à jour les informations du transporteur dans l'objet Order
-            $order->setCarrierName($carrier->getName());
-            $order->setCarrierPrice($carrier->getPrice());
-
-            // Enregistrez les modifications dans la session
-            $session->set('order', $order);
-        }
-
-        
-        // Récupérer les produits associés à chaque OrderDetail
-        $productRepository = $this->entityManager->getRepository(ShopProduct::class);
-        $orderProducts = [];
-        foreach ($order->getOrderDetails() as $orderDetail) {
-            $productId = $orderDetail->getProduct();
-            $quantity = $orderDetail->getQuantity();
-            $subtotal = $orderDetail->getTotal(); // Sous-total pour cet OrderDetail
-            $product = $productRepository->find($productId);
-            $orderProducts[] = [
-                'product' => $product,
-                'quantity' => $quantity,
-                'subtotal' => $subtotal,
-            ];
-        }
-       
-        return $this->render('order/shipping_method.html.twig', [
-            'order' => $order,
-            'carriers' => $carriers,
-            'form' => $form->createView(),
-            'orderProducts' => $orderProducts, // Passer les produits à la vue
-        ]);
-    }
 
  
 }
